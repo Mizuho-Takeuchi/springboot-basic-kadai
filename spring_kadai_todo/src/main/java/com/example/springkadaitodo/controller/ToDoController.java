@@ -1,8 +1,12 @@
 package com.example.springkadaitodo.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.example.springkadaitodo.entitiy.ToDo;
 import com.example.springkadaitodo.service.ToDoService;
 
 @Controller
@@ -14,7 +18,9 @@ public class ToDoController {
 	}
 	
 	@GetMapping("/todo")
-	public String todo() {
+	public String todo(Model model) {
+		List<ToDo> todo  = toDoService.getAll();
+		model.addAttribute("todo",todo);
 		return "todoView";
 	}
 }

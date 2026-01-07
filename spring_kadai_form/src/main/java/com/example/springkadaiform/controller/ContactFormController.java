@@ -1,5 +1,6 @@
 package com.example.springkadaiform.controller;
 
+import org.springframework.core.Conventions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,21 +22,25 @@ public class ContactFormController {
 	}
 	
 	@PostMapping("/confirm")
-	public String comfirmForm (@Validated ContactForm form, BindingResult result,
+	public String comfirmForm (@Validated ContactForm contactForm, BindingResult result,
 			RedirectAttributes redirectAttributes) {
 		
 		//バリデーションエラーがあったら終了
 		if(result.hasErrors()) {
-            return "contactFormView";
+			redirectAttributes.addFlashAttribute("contactForm", contactForm);
+			redirectAttributes.addFlashAttribute(BindingResult.MODEL_KEY_PREFIX 
+					+ Conventions.getVariableName(contactForm),result);
+            return "redirect:/form";
 		}
 		
 		//バリデーションに問題が無けれ確認画面に遷移
-		redirectAttributes.addFlashAttribute("contactForm", form);
+		redirectAttributes.addFlashAttribute("contactForm", contactForm);
 		return "redirect:/confirm";
 	}
 	
-	@GetMapping("/confirm") 
+	@GetMapping("/confirm")
 	public String showConfirm() {
-		return "confirmView";
-		}
+	    return "confirmView";
+	}
+
 }
